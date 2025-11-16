@@ -32,7 +32,7 @@ This application helps users determine their Ayurvedic body constitution (Prakru
 
 1. Clone the repository
    ```
-   git clone https://github.com/yourusername/ayurvedic-prakruti-assessment.git
+   git clone https://github.com/MehulBirare/ayurvedic-prakruti-assessment.git
    cd ayurvedic-prakruti-assessment
    ```
 
