@@ -1,113 +1,117 @@
 import React from 'react';
-import { Box, Container, Typography, Link, IconButton, Divider, useTheme as useMuiTheme } from '@mui/material';
-import { Facebook, Twitter, Instagram, LinkedIn } from '@mui/icons-material';
+import { Box, Container, Typography, Link, IconButton, Grid, Divider, useTheme as useMuiTheme } from '@mui/material';
+import { Facebook, Twitter, Instagram, LinkedIn, LocalFlorist as LeafIcon } from '@mui/icons-material';
 import { useTheme } from '../../context/ThemeContext';
 
 const Footer = () => {
   const { darkMode } = useTheme();
-  const muiTheme = useMuiTheme();
-
-  const footerStyle = {
-    backgroundColor: darkMode ? 'rgba(18, 18, 18, 0.8)' : 'rgba(255, 255, 255, 0.8)',
-    backdropFilter: 'blur(10px)',
-    WebkitBackdropFilter: 'blur(10px)',
-    padding: '2rem 0',
-    marginTop: '2rem',
-    borderTop: `1px solid ${darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
-  };
 
   return (
-    <Box component="footer" sx={footerStyle}>
+    <Box
+      component="footer"
+      sx={{
+        bgcolor: darkMode ? 'var(--bg-dark)' : '#f8fafc',
+        pt: 10,
+        pb: 5,
+        borderTop: `1px solid ${darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}`,
+      }}
+    >
       <Container maxWidth="lg">
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: { xs: 2, md: 0 } }}>
-            <img src="/logo.svg" alt="Logo" style={{ height: 40, marginRight: 10 }} />
-            <Typography variant="h6" component="div">
-              Ayurvedic Prakruti
-            </Typography>
-          </Box>
-          
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <IconButton color="primary" aria-label="facebook" component="a" href="#" target="_blank" rel="noopener">
-              <Facebook />
-            </IconButton>
-            <IconButton color="primary" aria-label="twitter" component="a" href="#" target="_blank" rel="noopener">
-              <Twitter />
-            </IconButton>
-            <IconButton color="primary" aria-label="instagram" component="a" href="#" target="_blank" rel="noopener">
-              <Instagram />
-            </IconButton>
-            <IconButton color="primary" aria-label="linkedin" component="a" href="#" target="_blank" rel="noopener">
-              <LinkedIn />
-            </IconButton>
-          </Box>
-        </Box>
-        
-        <Divider sx={{ my: 3 }} />
-        
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', mb: 3 }}>
-          <Box sx={{ mb: { xs: 2, md: 0 } }}>
-            <Typography variant="h6" gutterBottom>
-              About Us
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 400 }}>
-              Ayurvedic Prakruti Assessment helps you discover your unique body constitution according to Ayurvedic principles. Understanding your Prakruti can guide you toward optimal health and wellness.
-            </Typography>
-          </Box>
-          
-          <Box sx={{ mb: { xs: 2, md: 0 } }}>
-            <Typography variant="h6" gutterBottom>
-              Quick Links
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <Link href="/" color="text.secondary" underline="hover" sx={{ mb: 1 }}>
-                Home
-              </Link>
-              <Link href="/assessment" color="text.secondary" underline="hover" sx={{ mb: 1 }}>
-                Take Assessment
-              </Link>
-              <Link href="/login" color="text.secondary" underline="hover" sx={{ mb: 1 }}>
-                Login
-              </Link>
-              <Link href="/register" color="text.secondary" underline="hover">
-                Register
-              </Link>
+        <Grid container spacing={8} sx={{ mb: 8 }}>
+          <Grid item xs={12} md={4}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+              <LeafIcon sx={{ color: 'primary.main', mr: 1, fontSize: 32 }} />
+              <Typography variant="h5" sx={{ fontWeight: 800, letterSpacing: -1, fontStyle: 'italic' }}>
+                Prakruti
+              </Typography>
             </Box>
-          </Box>
-          
-          <Box>
-            <Typography variant="h6" gutterBottom>
-              Contact Us
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 4, lineHeight: 1.8 }}>
+              Empowering your wellness journey through the ancient wisdom of Ayurveda. Discover your unique constitution and live in harmony with nature.
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Email: d23amtics081@gmail.com
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              {[Facebook, Twitter, Instagram, LinkedIn].map((Icon, i) => (
+                <IconButton
+                  key={i}
+                  sx={{
+                    bgcolor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)',
+                    '&:hover': { bgcolor: 'primary.main', color: 'white' }
+                  }}
+                >
+                  <Icon fontSize="small" />
+                </IconButton>
+              ))}
+            </Box>
+          </Grid>
+
+          <Grid item xs={6} md={2}>
+            <Typography variant="h6" sx={{ mb: 3, fontWeight: 700 }}>Platform</Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {['Home', 'Assessment', 'Dashboard', 'Profile'].map((item) => (
+                <Link
+                  key={item}
+                  href={`/${item.toLowerCase() === 'home' ? '' : item.toLowerCase()}`}
+                  color="text.secondary"
+                  underline="none"
+                  sx={{ '&:hover': { color: 'primary.main' } }}
+                >
+                  {item}
+                </Link>
+              ))}
+            </Box>
+          </Grid>
+
+          <Grid item xs={6} md={2}>
+            <Typography variant="h6" sx={{ mb: 3, fontWeight: 700 }}>Legal</Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((item) => (
+                <Link
+                  key={item}
+                  href="#"
+                  color="text.secondary"
+                  underline="none"
+                  sx={{ '&:hover': { color: 'primary.main' } }}
+                >
+                  {item}
+                </Link>
+              ))}
+            </Box>
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+            <Typography variant="h6" sx={{ mb: 3, fontWeight: 700 }}>Stay Mindful</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+              Join our newsletter for weekly Ayurvedic tips and wellness insights.
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Phone: 6355660998
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Address: 307, Ayurveda St, Wellness City
-            </Typography>
-          </Box>
-        </Box>
-        
-        <Divider sx={{ my: 3 }} />
-        
-        <Box sx={{ textAlign: 'center' }}>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <input
+                type="email"
+                placeholder="Your email"
+                style={{
+                  padding: '12px 20px',
+                  borderRadius: '100px',
+                  border: `1px solid ${darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+                  background: darkMode ? 'rgba(255,255,255,0.05)' : 'white',
+                  color: 'inherit',
+                  width: '100%',
+                  outline: 'none'
+                }}
+              />
+              <IconButton sx={{ bgcolor: 'primary.main', color: 'white', '&:hover': { bgcolor: 'primary.dark' } }}>
+                <LeafIcon />
+              </IconButton>
+            </Box>
+          </Grid>
+        </Grid>
+
+        <Divider sx={{ mb: 4, opacity: 0.5 }} />
+
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
           <Typography variant="body2" color="text.secondary">
-            © {new Date().getFullYear()} Ayurvedic Prakruti Assessment. All rights reserved.
+            © {new Date().getFullYear()} Prakruti Wellness. Designed for harmony.
           </Typography>
-          <Box sx={{ mt: 1 }}>
-            <Link href="#" color="text.secondary" underline="hover" sx={{ mx: 1 }}>
-              Privacy Policy
-            </Link>
-            <Link href="#" color="text.secondary" underline="hover" sx={{ mx: 1 }}>
-              Terms of Service
-            </Link>
-            <Link href="#" color="text.secondary" underline="hover" sx={{ mx: 1 }}>
-              Cookie Policy
-            </Link>
-          </Box>
+          <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            Made with <LeafIcon sx={{ fontSize: 16, color: 'primary.main' }} /> for a better life.
+          </Typography>
         </Box>
       </Container>
     </Box>

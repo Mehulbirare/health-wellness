@@ -58,32 +58,31 @@ const Dashboard = () => {
     // Use the actual user data from AuthContext
     if (isAuthenticated && user) {
       // Format the user data to match our dashboard's expected structure
+      const hasAssessment = user.prakrutiResult && user.prakrutiResult.lastAssessmentDate;
       const formattedUserData = {
-        name: user.name || 'Mehul Birare', // Default to Mehul Birare as requested
+        name: user.name || 'Mehul Birare',
         email: user.email || 'mehul.birare@example.com',
-        constitution: user.prakrutiResult ? {
-          primaryDosha: user.prakrutiResult.dominantDosha?.split('-')[0] || 'pitta',
-          secondaryDosha: user.prakrutiResult.dominantDosha?.split('-')[1] || 'vata',
+        constitution: hasAssessment ? {
+          primaryDosha: user.prakrutiResult.dominantDosha?.split('-')[0] || '',
+          secondaryDosha: user.prakrutiResult.dominantDosha?.split('-')[1] || '',
           percentages: {
-            vata: user.prakrutiResult.vata || 30,
-            pitta: user.prakrutiResult.pitta || 50,
-            kapha: user.prakrutiResult.kapha || 20
+            vata: user.prakrutiResult.vata ?? 0,
+            pitta: user.prakrutiResult.pitta ?? 0,
+            kapha: user.prakrutiResult.kapha ?? 0
           },
-          lastAssessment: user.prakrutiResult.lastAssessmentDate ? 
-            new Date(user.prakrutiResult.lastAssessmentDate).toISOString().split('T')[0] : 
-            '2023-06-15'
+          lastAssessment: new Date(user.prakrutiResult.lastAssessmentDate).toISOString().split('T')[0]
         } : {
-          primaryDosha: 'pitta',
-          secondaryDosha: 'vata',
+          primaryDosha: '',
+          secondaryDosha: '',
           percentages: {
-            vata: 30,
-            pitta: 50,
-            kapha: 20
+            vata: 0,
+            pitta: 0,
+            kapha: 0
           },
-          lastAssessment: '2023-06-15'
+          lastAssessment: 'No assessment taken'
         }
       };
-      
+
       setUserData(formattedUserData);
       setLoading(false);
     }
@@ -115,7 +114,7 @@ const Dashboard = () => {
       case 'kapha':
         return '#4CAF50'; // Green for Kapha
       default:
-        return '#2196F3'; // Default blue
+        return darkMode ? '#424242' : '#bdbdbd'; // Gray for neutral
     }
   };
 
@@ -256,7 +255,7 @@ const Dashboard = () => {
                     width: 100,
                     height: 100,
                     borderRadius: '50%',
-                    backgroundColor: getDoshaColor(userData?.constitution?.primaryDosha || 'vata'),
+                    backgroundColor: getDoshaColor(userData?.constitution?.primaryDosha),
                     color: 'white',
                     display: 'flex',
                     alignItems: 'center',
@@ -285,7 +284,7 @@ const Dashboard = () => {
                 <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
                   Your Constitution
                 </Typography>
-                {userData?.constitution ? (
+                {userData?.constitution && userData.constitution.primaryDosha ? (
                   <>
                     <Typography variant="body1" paragraph>
                       Primary: <strong>{getDosha(userData.constitution.primaryDosha)}</strong> ({userData.constitution.percentages[userData.constitution.primaryDosha]}%)
@@ -298,9 +297,14 @@ const Dashboard = () => {
                     </Typography>
                   </>
                 ) : (
-                  <Typography variant="body1" color="text.secondary">
-                    You haven't taken the assessment yet.
-                  </Typography>
+                  <>
+                    <Typography variant="body1" color="text.secondary" paragraph>
+                      Vata: 0% | Pitta: 0% | Kapha: 0%
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      You haven't taken the assessment yet.
+                    </Typography>
+                  </>
                 )}
               </Box>
 
@@ -313,7 +317,7 @@ const Dashboard = () => {
                   onClick={() => navigate('/assessment')}
                   sx={{ borderRadius: '50px', py: 1.2, mb: 2 }}
                 >
-                  {userData?.constitution ? 'Retake Assessment' : 'Take Assessment'}
+                  {userData?.constitution && userData.constitution.primaryDosha ? 'Retake Assessment' : 'Take Assessment'}
                 </Button>
                 <Button
                   variant="outlined"
@@ -343,18 +347,18 @@ const Dashboard = () => {
                 <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
                   Welcome back, {userData?.name?.split(' ')[0] || 'Mehul'}!
                 </Typography>
-                {userData?.constitution ? (
+                {userData?.constitution && userData.constitution.primaryDosha ? (
                   <Typography variant="body1">
                     Based on your assessment, you have a <strong>{getDosha(userData.constitution.primaryDosha)}-{getDosha(userData.constitution.secondaryDosha)}</strong> constitution. Here are your personalized recommendations to maintain balance.
                   </Typography>
                 ) : (
                   <Typography variant="body1">
-                    Take the Ayurvedic assessment to discover your unique constitution and receive personalized recommendations.
+                    You haven't taken the personal Prakruti assessment yet. Discover your unique Ayurvedic constitution to get personalized health and wellness recommendations.
                   </Typography>
                 )}
               </Box>
 
-              {userData?.constitution ? (
+              {userData?.constitution && (userData.constitution.primaryDosha || userData.constitution.percentages.vata === 0) ? (
                 <>
                   <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
                     <Tabs

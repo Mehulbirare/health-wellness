@@ -19,6 +19,7 @@ import {
   ListItemText,
   ListItemIcon,
   Divider,
+  Container,
   useTheme as useMuiTheme
 } from '@mui/material';
 import {
@@ -30,7 +31,8 @@ import {
   Person as PersonIcon,
   ExitToApp as LogoutIcon,
   AdminPanelSettings as AdminIcon,
-  Home as HomeIcon
+  Home as HomeIcon,
+  LocalFlorist as LeafIcon
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 
@@ -46,31 +48,17 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 20);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  const handleMenu = (event) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
+  const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
   const handleLogout = () => {
     logout();
@@ -78,99 +66,63 @@ const Navbar = () => {
     navigate('/');
   };
 
-  const navbarStyle = {
-    backgroundColor: darkMode ? 'rgba(18, 18, 18, 0.8)' : 'rgba(255, 255, 255, 0.8)',
-    backdropFilter: 'blur(10px)',
-    WebkitBackdropFilter: 'blur(10px)',
-    boxShadow: scrolled ? '0 4px 20px rgba(0, 0, 0, 0.1)' : 'none',
-    transition: 'all 0.3s ease'
+  const navBarStyle = {
+    background: scrolled
+      ? (darkMode ? 'rgba(15, 23, 42, 0.8)' : 'rgba(255, 255, 255, 0.8)')
+      : 'transparent',
+    backdropFilter: scrolled ? 'blur(12px)' : 'none',
+    boxShadow: scrolled ? '0 4px 20px rgba(0, 0, 0, 0.05)' : 'none',
+    transition: 'all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)',
+    color: (scrolled || location.pathname !== '/') ? (darkMode ? 'white' : 'black') : 'white',
+    borderBottom: scrolled ? `1px solid ${darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'}` : 'none',
   };
 
-  const logoVariants = {
-    hover: {
-      scale: 1.05,
-      transition: { duration: 0.3 }
-    }
-  };
+  const menuItems = [
+    { text: 'Home', path: '/', icon: <HomeIcon /> },
+    { text: 'Assessment', path: '/assessment', icon: <AssessmentIcon /> },
+    { text: 'Dashboard', path: '/dashboard', icon: <DashboardIcon />, private: true },
+  ];
 
   const drawer = (
-    <Box sx={{ width: 250 }}>
-      <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <img src="/logo.svg" alt="Logo" style={{ height: 40 }} />
-        <Typography variant="h6" sx={{ ml: 1 }}>
-          Prakruti
-        </Typography>
+    <Box sx={{ width: 280, height: '100%', bgcolor: darkMode ? 'var(--bg-dark)' : 'var(--bg-light)' }}>
+      <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
+        <LeafIcon color="primary" />
+        <Typography variant="h6" sx={{ fontWeight: 700 }}>Prakruti</Typography>
       </Box>
-      <Divider />
-      <List>
-        <ListItem button component={Link} to="/" onClick={handleDrawerToggle}>
-          <ListItemIcon>
-            <HomeIcon />
-          </ListItemIcon>
-          <ListItemText primary="Home" />
-        </ListItem>
-        
-        {isAuthenticated ? (
-          <>
-            <ListItem button component={Link} to="/dashboard" onClick={handleDrawerToggle}>
-              <ListItemIcon>
-                <DashboardIcon />
+      <Divider sx={{ opacity: 0.5 }} />
+      <List sx={{ px: 2, pt: 2 }}>
+        {menuItems.map((item) => (
+          (!item.private || isAuthenticated) && (
+            <ListItem
+              button
+              key={item.text}
+              component={Link}
+              to={item.path}
+              onClick={handleDrawerToggle}
+              sx={{
+                borderRadius: '12px',
+                mb: 1,
+                bgcolor: location.pathname === item.path ? 'rgba(6, 78, 59, 0.1)' : 'transparent',
+                color: location.pathname === item.path ? 'primary.main' : 'inherit'
+              }}
+            >
+              <ListItemIcon sx={{ color: location.pathname === item.path ? 'primary.main' : 'inherit' }}>
+                {item.icon}
               </ListItemIcon>
-              <ListItemText primary="Dashboard" />
+              <ListItemText primary={item.text} primaryTypographyProps={{ fontWeight: 500 }} />
             </ListItem>
-            <ListItem button component={Link} to="/assessment" onClick={handleDrawerToggle}>
-              <ListItemIcon>
-                <AssessmentIcon />
-              </ListItemIcon>
-              <ListItemText primary="Assessment" />
-            </ListItem>
-            <ListItem button component={Link} to="/profile" onClick={handleDrawerToggle}>
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText primary="Profile" />
-            </ListItem>
-            {user && user.role === 'admin' && (
-              <ListItem button component={Link} to="/admin" onClick={handleDrawerToggle}>
-                <ListItemIcon>
-                  <AdminIcon />
-                </ListItemIcon>
-                <ListItemText primary="Admin" />
-              </ListItem>
-            )}
-            <ListItem button onClick={() => { handleLogout(); handleDrawerToggle(); }}>
-              <ListItemIcon>
-                <LogoutIcon />
-              </ListItemIcon>
-              <ListItemText primary="Logout" />
-            </ListItem>
-          </>
-        ) : (
-          <>
-            <ListItem button component={Link} to="/login" onClick={handleDrawerToggle}>
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText primary="Login" />
-            </ListItem>
-            <ListItem button component={Link} to="/register" onClick={handleDrawerToggle}>
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText primary="Register" />
-            </ListItem>
-          </>
-        )}
+          )
+        ))}
       </List>
-      <Divider />
-      <Box sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
+      <Box sx={{ position: 'absolute', bottom: 20, width: '100%', px: 3 }}>
         <Button
+          fullWidth
+          variant="outlined"
           startIcon={darkMode ? <LightModeIcon /> : <DarkModeIcon />}
           onClick={toggleDarkMode}
-          color="primary"
-          variant="outlined"
+          sx={{ borderRadius: '100px' }}
         >
-          {darkMode ? 'Light Mode' : 'Dark Mode'}
+          {darkMode ? 'Light' : 'Dark'} Mode
         </Button>
       </Box>
     </Box>
@@ -178,163 +130,115 @@ const Navbar = () => {
 
   return (
     <>
-      <AppBar position="sticky" sx={navbarStyle} elevation={0}>
-        <Toolbar>
-          {isMobile && (
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-          )}
-          
-          <motion.div
-            variants={logoVariants}
-            whileHover="hover"
-            style={{ display: 'flex', alignItems: 'center' }}
-          >
-            <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-              <img src="/logo.svg" alt="Logo" style={{ height: 40, marginRight: 10 }} />
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
-                Ayurvedic Prakruti
-              </Typography>
-            </Link>
-          </motion.div>
-          
-          <Box sx={{ flexGrow: 1 }} />
-          
-          {!isMobile && (
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <IconButton onClick={toggleDarkMode} color="inherit" sx={{ mr: 1 }}>
-                {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+      <AppBar position="fixed" sx={navBarStyle} elevation={0}>
+        <Container maxWidth="xl">
+          <Toolbar disableGutters sx={{ height: 80 }}>
+            {isMobile && (
+              <IconButton color="inherit" onClick={handleDrawerToggle} sx={{ mr: 2 }}>
+                <MenuIcon />
               </IconButton>
-              
-              {isAuthenticated ? (
-                <>
-                  <Button 
-                    color="inherit" 
-                    component={Link} 
-                    to="/dashboard"
-                    sx={{ mx: 1 }}
-                  >
-                    Dashboard
-                  </Button>
-                  <Button 
-                    color="inherit" 
-                    component={Link} 
-                    to="/assessment"
-                    sx={{ mx: 1 }}
-                  >
-                    Assessment
-                  </Button>
-                  
-                  <IconButton
-                    onClick={handleMenu}
-                    color="inherit"
-                    sx={{ ml: 1 }}
-                  >
-                    <Avatar 
-                      sx={{ 
-                        width: 32, 
-                        height: 32,
-                        bgcolor: user?.prakrutiResult?.dominantDosha === 'vata' ? '#8E44AD' :
-                                user?.prakrutiResult?.dominantDosha === 'pitta' ? '#E74C3C' :
-                                user?.prakrutiResult?.dominantDosha === 'kapha' ? '#2ECC71' : 'primary.main'
+            )}
+
+            <Box component={Link} to="/" sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+              <motion.div whileHover={{ rotate: 15 }} transition={{ type: 'spring' }}>
+                <LeafIcon sx={{ fontSize: 32, mr: 1, color: (scrolled || location.pathname !== '/') ? 'primary.main' : 'white' }} />
+              </motion.div>
+              <Typography variant="h5" sx={{ fontWeight: 800, letterSpacing: -1, fontStyle: 'italic', color: (scrolled || location.pathname !== '/') ? 'inherit' : 'white' }}>
+                Prakruti
+              </Typography>
+            </Box>
+
+            <Box sx={{ flexGrow: 1 }} />
+
+            {!isMobile && (
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                {menuItems.map((item) => (
+                  (!item.private || isAuthenticated) && (
+                    <Button
+                      key={item.text}
+                      component={Link}
+                      to={item.path}
+                      sx={{
+                        color: 'inherit',
+                        px: 2,
+                        fontWeight: 500,
+                        opacity: location.pathname === item.path ? 1 : 0.7,
+                        '&:hover': { opacity: 1 }
                       }}
                     >
-                      {user?.name?.charAt(0)}
-                    </Avatar>
-                  </IconButton>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'right',
-                    }}
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    PaperProps={{
-                      elevation: 0,
-                      sx: {
-                        overflow: 'visible',
-                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.1))',
-                        mt: 1.5,
-                        '& .MuiAvatar-root': {
-                          width: 32,
-                          height: 32,
-                          ml: -0.5,
-                          mr: 1,
-                        },
-                      },
-                    }}
-                  >
-                    <MenuItem component={Link} to="/profile" onClick={handleClose}>
-                      <ListItemIcon>
-                        <PersonIcon fontSize="small" />
-                      </ListItemIcon>
-                      Profile
-                    </MenuItem>
-                    {user && user.role === 'admin' && (
-                      <MenuItem component={Link} to="/admin" onClick={handleClose}>
-                        <ListItemIcon>
-                          <AdminIcon fontSize="small" />
-                        </ListItemIcon>
-                        Admin Panel
+                      {item.text}
+                    </Button>
+                  )
+                ))}
+
+                <IconButton onClick={toggleDarkMode} color="inherit" sx={{ mx: 1 }}>
+                  {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+                </IconButton>
+
+                {isAuthenticated ? (
+                  <>
+                    <IconButton onClick={handleMenu} sx={{ p: 0.5, border: '2px solid rgba(6, 78, 59, 0.3)' }}>
+                      <Avatar
+                        sx={{ width: 32, height: 32, bgcolor: 'primary.main' }}
+                      >
+                        {user?.name?.charAt(0)}
+                      </Avatar>
+                    </IconButton>
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                      PaperProps={{
+                        elevation: 0,
+                        sx: {
+                          mt: 1.5,
+                          borderRadius: '16px',
+                          minWidth: 180,
+                          bgcolor: darkMode ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                          backdropFilter: 'blur(10px)',
+                          boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+                          '& .MuiMenuItem-root': { borderRadius: '8px', mx: 1, my: 0.5 }
+                        }
+                      }}
+                    >
+                      <MenuItem component={Link} to="/profile" onClick={handleClose}>
+                        <ListItemIcon><PersonIcon fontSize="small" /></ListItemIcon>
+                        Profile
                       </MenuItem>
-                    )}
-                    <MenuItem onClick={handleLogout}>
-                      <ListItemIcon>
-                        <LogoutIcon fontSize="small" />
-                      </ListItemIcon>
-                      Logout
-                    </MenuItem>
-                  </Menu>
-                </>
-              ) : (
-                <>
-                  <Button 
-                    color="inherit" 
-                    component={Link} 
+                      <MenuItem onClick={handleLogout}>
+                        <ListItemIcon><LogoutIcon fontSize="small" /></ListItemIcon>
+                        Logout
+                      </MenuItem>
+                    </Menu>
+                  </>
+                ) : (
+                  <Button
+                    component={Link}
                     to="/login"
-                    sx={{ mx: 1 }}
+                    variant="contained"
+                    sx={{
+                      borderRadius: '100px',
+                      px: 4,
+                      bgcolor: (scrolled || location.pathname !== '/') ? 'primary.main' : 'white',
+                      color: (scrolled || location.pathname !== '/') ? 'white' : 'black',
+                      '&:hover': {
+                        bgcolor: (scrolled || location.pathname !== '/') ? 'primary.dark' : 'rgba(255,255,255,0.9)',
+                      }
+                    }}
                   >
                     Login
                   </Button>
-                  <Button 
-                    variant="contained" 
-                    color="primary" 
-                    component={Link} 
-                    to="/register"
-                    sx={{ ml: 1 }}
-                  >
-                    Register
-                  </Button>
-                </>
-              )}
-            </Box>
-          )}
-        </Toolbar>
+                )}
+              </Box>
+            )}
+          </Toolbar>
+        </Container>
       </AppBar>
-      
+
       <Drawer
-        variant="temporary"
         open={mobileOpen}
         onClose={handleDrawerToggle}
-        ModalProps={{
-          keepMounted: true, // Better open performance on mobile
-        }}
-        sx={{
-          display: { xs: 'block', md: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250 },
-        }}
+        PaperProps={{ sx: { borderRadius: '0 24px 24px 0' } }}
       >
         {drawer}
       </Drawer>

@@ -1,3 +1,19 @@
+:root {
+  --primary: #064e3b;
+  --primary-light: #059669;
+  --secondary: #d4af37;
+  --accent: #f59e0b;
+  --text-dark: #0f172a;
+  --text-light: #f8fafc;
+  --bg-light: #fdfbf7;
+  --bg-dark: #0f172a;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 4px 18px -4px rgba(0, 0, 0, 0.05);
+  --heading-font: 'Playfair Display', serif;
+  --body-font: 'Outfit', sans-serif;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -5,167 +21,170 @@
 }
 
 body {
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: var(--body-font);
+  background-color: var(--bg-light);
+  color: var(--text-dark);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-x: hidden;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--heading-font);
+  font-weight: 700;
+  line-height: 1.2;
 }
 
-/* Glassmorphism effect */
+main {
+  min-height: calc(100vh - 80px);
+  /* Adjust based on navbar height */
+}
+
+.container {
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Glassmorphism Refined */
 .glass {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--card-shadow);
 }
 
-.glass-dark {
-  background: rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 10px;
+.dark-mode .glass {
+  background: rgba(15, 23, 42, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --glass-bg: rgba(15, 23, 42, 0.7);
 }
 
-/* Gradient backgrounds */
+/* Premium Gradients */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dark-mode .gradient-text {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .gradient-bg-light {
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: radial-gradient(circle at top left, #fdfbf7 0%, #f3f4f6 100%);
 }
 
 .gradient-bg-dark {
-  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+  background: radial-gradient(circle at top right, #0f172a 0%, #020617 100%);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
 
-.fade-in {
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-.slide-up {
-  animation: slideUp 0.5s ease-out;
-}
-
-/* Toast notifications */
-.toast-container {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 9999;
-}
-
-.toast {
-  padding: 12px 20px;
-  margin-bottom: 10px;
-  border-radius: 4px;
-  color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  display: flex;
-  align-items: center;
-  animation: slideUp 0.3s ease-out;
-}
-
-.toast-success {
-  background-color: #4caf50;
-}
-
-.toast-error {
-  background-color: #f44336;
-}
-
-.toast-info {
-  background-color: #2196f3;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .container {
-    padding: 0 15px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Microinteractions */
-.hover-scale {
-  transition: transform 0.3s ease;
+.reveal {
+  animation: reveal 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
-.hover-scale:hover {
-  transform: scale(1.05);
+/* Hover Effects */
+.premium-card {
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  border-radius: 20px;
+  overflow: hidden;
 }
 
-.hover-shadow {
-  transition: box-shadow 0.3s ease;
+.premium-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2);
 }
 
-.hover-shadow:hover {
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+.dark-mode {
+  color: var(--text-light);
 }
 
-/* Form styles */
-.floating-label {
-  position: relative;
-  margin-bottom: 20px;
+/* Form Styles Refresh */
+.floating-label input:focus {
+  border-bottom: 2px solid var(--primary);
 }
 
-.floating-label input,
-.floating-label textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
-  transition: border-color 0.3s ease;
+/* MUI Overrides helper classes */
+.mui-paper-glass {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 24px !important;
 }
 
-.floating-label label {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  font-size: 16px;
-  color: #777;
-  transition: all 0.3s ease;
-  pointer-events: none;
+/* Premium Form Elements */
+.MuiOutlinedInput-root {
+  border-radius: 16px !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  transition: all 0.3s ease !important;
 }
 
-.floating-label input:focus,
-.floating-label textarea:focus {
-  border-color: #3f51b5;
-  outline: none;
+.MuiOutlinedInput-root:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
 }
 
-.floating-label input:focus + label,
-.floating-label textarea:focus + label,
-.floating-label input:not(:placeholder-shown) + label,
-.floating-label textarea:not(:placeholder-shown) + label {
-  top: -10px;
-  left: 5px;
-  font-size: 12px;
-  background-color: white;
-  padding: 0 5px;
+.MuiOutlinedInput-root.Mui-focused {
+  background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 0 0 4px rgba(6, 78, 59, 0.1) !important;
 }
 
-/* Dark mode adjustments for floating labels */
-.dark-mode .floating-label input:focus + label,
-.dark-mode .floating-label textarea:focus + label,
-.dark-mode .floating-label input:not(:placeholder-shown) + label,
-.dark-mode .floating-label textarea:not(:placeholder-shown) + label {
-  background-color: #121212;
-  color: #fff;
+.MuiInputLabel-root {
+  font-family: var(--body-font) !important;
+  font-weight: 500 !important;
+}
+
+/* Fix for Chrome Autofill Blue Background */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #1e293b inset !important;
+  -webkit-text-fill-color: white !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.dark-mode input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px #0f172a inset !important;
 }

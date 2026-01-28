@@ -25,9 +25,10 @@ import {
   Person as PersonIcon,
   Lock as LockIcon,
   ArrowForward as ArrowForwardIcon,
-  ArrowBack as ArrowBackIcon
+  ArrowBack as ArrowBackIcon,
+  LocalFlorist as LeafIcon
 } from '@mui/icons-material';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Register = () => {
   const { register, isAuthenticated } = useAuth();
@@ -47,10 +48,9 @@ const Register = () => {
   const [error, setError] = useState('');
   const [formErrors, setFormErrors] = useState({});
 
-  const steps = ['Personal Information', 'Account Security'];
+  const steps = ['Essentials', 'Security'];
 
   useEffect(() => {
-    // Redirect if already authenticated
     if (isAuthenticated) {
       navigate('/dashboard');
     }
@@ -61,10 +61,7 @@ const Register = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (step === 0) {
-      if (!formData.name.trim()) {
-        errors.name = 'Name is required';
-      }
-
+      if (!formData.name.trim()) errors.name = 'Name is required';
       if (!formData.email) {
         errors.email = 'Email is required';
       } else if (!emailRegex.test(formData.email)) {
@@ -74,50 +71,30 @@ const Register = () => {
       if (!formData.password) {
         errors.password = 'Password is required';
       } else if (formData.password.length < 6) {
-        errors.password = 'Password must be at least 6 characters';
+        errors.password = 'Minimum 6 characters';
       }
-
-      if (!formData.confirmPassword) {
-        errors.confirmPassword = 'Please confirm your password';
-      } else if (formData.password !== formData.confirmPassword) {
+      if (formData.confirmPassword !== formData.password) {
         errors.confirmPassword = 'Passwords do not match';
       }
     }
-
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
   const handleNext = () => {
-    if (validateStep(activeStep)) {
-      setActiveStep((prevStep) => prevStep + 1);
-    }
+    if (validateStep(activeStep)) setActiveStep((prev) => prev + 1);
   };
 
-  const handleBack = () => {
-    setActiveStep((prevStep) => prevStep - 1);
-  };
+  const handleBack = () => setActiveStep((prev) => prev - 1);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-
-    // Clear error for this field when user starts typing
-    if (formErrors[name]) {
-      setFormErrors({
-        ...formErrors,
-        [name]: ''
-      });
-    }
+    setFormData({ ...formData, [name]: value });
+    if (formErrors[name]) setFormErrors({ ...formErrors, [name]: '' });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-
     if (!validateStep(activeStep)) return;
 
     setLoading(true);
@@ -128,231 +105,219 @@ const Register = () => {
     });
     setLoading(false);
 
-    if (success) {
-      navigate('/dashboard');
-    }
-  };
-
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const toggleShowConfirmPassword = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
-
-  const getStepContent = (step) => {
-    switch (step) {
-      case 0:
-        return (
-          <>
-            <Box sx={{ mb: 3 }}>
-              <TextField
-                fullWidth
-                id="name"
-                name="name"
-                label="Full Name"
-                value={formData.name}
-                onChange={handleChange}
-                error={!!formErrors.name}
-                helperText={formErrors.name}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <PersonIcon color="primary" />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="outlined"
-              />
-            </Box>
-
-            <Box sx={{ mb: 4 }}>
-              <TextField
-                fullWidth
-                id="email"
-                name="email"
-                label="Email Address"
-                value={formData.email}
-                onChange={handleChange}
-                error={!!formErrors.email}
-                helperText={formErrors.email}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <EmailIcon color="primary" />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="outlined"
-              />
-            </Box>
-
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleNext}
-                endIcon={<ArrowForwardIcon />}
-                sx={{ borderRadius: '50px', py: 1, px: 3 }}
-              >
-                Next
-              </Button>
-            </Box>
-          </>
-        );
-      case 1:
-        return (
-          <>
-            <Box sx={{ mb: 3 }}>
-              <TextField
-                fullWidth
-                id="password"
-                name="password"
-                label="Password"
-                type={showPassword ? 'text' : 'password'}
-                value={formData.password}
-                onChange={handleChange}
-                error={!!formErrors.password}
-                helperText={formErrors.password}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LockIcon color="primary" />
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={toggleShowPassword}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                variant="outlined"
-              />
-            </Box>
-
-            <Box sx={{ mb: 4 }}>
-              <TextField
-                fullWidth
-                id="confirmPassword"
-                name="confirmPassword"
-                label="Confirm Password"
-                type={showConfirmPassword ? 'text' : 'password'}
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                error={!!formErrors.confirmPassword}
-                helperText={formErrors.confirmPassword}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LockIcon color="primary" />
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle confirm password visibility"
-                        onClick={toggleShowConfirmPassword}
-                        edge="end"
-                      >
-                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                variant="outlined"
-              />
-            </Box>
-
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Button
-                onClick={handleBack}
-                startIcon={<ArrowBackIcon />}
-                sx={{ borderRadius: '50px', py: 1, px: 3 }}
-              >
-                Back
-              </Button>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                sx={{ borderRadius: '50px', py: 1, px: 3, position: 'relative' }}
-              >
-                {loading ? (
-                  <CircularProgress size={24} color="inherit" />
-                ) : (
-                  'Create Account'
-                )}
-              </Button>
-            </Box>
-          </>
-        );
-      default:
-        return 'Unknown step';
-    }
+    if (success) navigate('/dashboard');
   };
 
   return (
-    <Container maxWidth="sm" sx={{ py: 8 }}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Paper
-          elevation={0}
-          className={darkMode ? 'glass-dark' : 'glass'}
-          sx={{
-            p: { xs: 3, md: 5 },
-            borderRadius: 4,
-            overflow: 'hidden'
-          }}
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        overflow: 'hidden',
+        py: 12
+      }}
+    >
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: 'url(/assets/images/auth_bg.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          filter: 'brightness(0.6)',
+          zIndex: -1
+        }}
+      />
+
+      <Container maxWidth="sm">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
         >
-          <Box sx={{ textAlign: 'center', mb: 4 }}>
-            <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
-              Create Account
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              Join us to discover your Ayurvedic constitution
-            </Typography>
-          </Box>
+          <Paper
+            elevation={0}
+            className="glass"
+            sx={{
+              p: { xs: 4, md: 6 },
+              borderRadius: '40px',
+              bgcolor: darkMode ? 'rgba(15, 23, 42, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+              boxShadow: '0 30px 60px rgba(0,0,0,0.3)',
+            }}
+          >
+            <Box sx={{ textAlign: 'center', mb: 4 }}>
+              <LeafIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
+              <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>Join Prakruti</Typography>
+              <Typography variant="body1" color="text.secondary">Start your transition to a mindful life.</Typography>
+            </Box>
 
-          <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
+            <Stepper activeStep={activeStep} sx={{ mb: 6 }}>
+              {steps.map((label) => (
+                <Step key={label}>
+                  <StepLabel sx={{ '& .MuiStepLabel-label': { fontWeight: 600 } }}>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
 
-          {error && (
-            <Alert severity="error" sx={{ mb: 3 }}>
-              {error}
-            </Alert>
-          )}
+            {error && <Alert severity="error" sx={{ mb: 3, borderRadius: '12px' }}>{error}</Alert>}
 
-          <Box component="form" onSubmit={handleSubmit}>
-            {getStepContent(activeStep)}
-          </Box>
+            <Box component="form" onSubmit={handleSubmit}>
+              <AnimatePresence mode="wait">
+                {activeStep === 0 ? (
+                  <motion.div
+                    key="step0"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                  >
+                    <TextField
+                      fullWidth
+                      label="Full Name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      error={!!formErrors.name}
+                      helperText={formErrors.name}
+                      sx={{
+                        mb: 3,
+                        '& .MuiInputLabel-root': { color: darkMode ? 'rgba(255,255,255,0.7)' : 'inherit' }
+                      }}
+                      InputProps={{
+                        startAdornment: <InputAdornment position="start"><PersonIcon sx={{ color: 'primary.main', mr: 1 }} /></InputAdornment>,
+                      }}
+                    />
+                    <TextField
+                      fullWidth
+                      label="Email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      error={!!formErrors.email}
+                      helperText={formErrors.email}
+                      sx={{
+                        mb: 4,
+                        '& .MuiInputLabel-root': { color: darkMode ? 'rgba(255,255,255,0.7)' : 'inherit' }
+                      }}
+                      InputProps={{
+                        startAdornment: <InputAdornment position="start"><EmailIcon sx={{ color: 'primary.main', mr: 1 }} /></InputAdornment>,
+                      }}
+                    />
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      onClick={handleNext}
+                      endIcon={<ArrowForwardIcon />}
+                      sx={{
+                        py: 2,
+                        borderRadius: '100px',
+                        fontWeight: 700,
+                        bgcolor: 'primary.main',
+                        '&:hover': { bgcolor: 'primary.dark' },
+                        boxShadow: '0 10px 20px rgba(6, 78, 59, 0.2)'
+                      }}
+                    >
+                      Next Step
+                    </Button>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="step1"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                  >
+                    <TextField
+                      fullWidth
+                      label="Password"
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={formData.password}
+                      onChange={handleChange}
+                      error={!!formErrors.password}
+                      helperText={formErrors.password}
+                      sx={{
+                        mb: 3,
+                        '& .MuiInputLabel-root': { color: darkMode ? 'rgba(255,255,255,0.7)' : 'inherit' }
+                      }}
+                      InputProps={{
+                        startAdornment: <InputAdornment position="start"><LockIcon sx={{ color: 'primary.main', mr: 1 }} /></InputAdornment>,
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                              {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                    <TextField
+                      fullWidth
+                      label="Confirm Password"
+                      name="confirmPassword"
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      error={!!formErrors.confirmPassword}
+                      helperText={formErrors.confirmPassword}
+                      sx={{
+                        mb: 4,
+                        '& .MuiInputLabel-root': { color: darkMode ? 'rgba(255,255,255,0.7)' : 'inherit' }
+                      }}
+                      InputProps={{
+                        startAdornment: <InputAdornment position="start"><LockIcon sx={{ color: 'primary.main', mr: 1 }} /></InputAdornment>,
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)} edge="end">
+                              {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                    <Box sx={{ display: 'flex', gap: 2 }}>
+                      <Button onClick={handleBack} startIcon={<ArrowBackIcon />} sx={{ borderRadius: '100px', px: 3 }}>
+                        Back
+                      </Button>
+                      <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        disabled={loading}
+                        sx={{
+                          py: 2,
+                          borderRadius: '100px',
+                          fontWeight: 700,
+                          bgcolor: 'primary.main',
+                          '&:hover': { bgcolor: 'primary.dark' },
+                          boxShadow: '0 10px 20px rgba(6, 78, 59, 0.2)'
+                        }}
+                      >
+                        {loading ? <CircularProgress size={24} color="inherit" /> : 'Create Account'}
+                      </Button>
+                    </Box>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </Box>
 
-          <Box sx={{ textAlign: 'center', mt: 4 }}>
-            <Typography variant="body2">
-              Already have an account?{' '}
-              <Link component={RouterLink} to="/login" color="primary">
-                Sign in
-              </Link>
-            </Typography>
-          </Box>
-        </Paper>
-      </motion.div>
-    </Container>
+            <Box sx={{ mt: 4, textAlign: 'center' }}>
+              <Typography variant="body2" color="text.secondary">
+                Already have an account? {' '}
+                <Link component={RouterLink} to="/login" sx={{ fontWeight: 700, color: 'primary.main', textDecoration: 'none' }}>
+                  Sign in
+                </Link>
+              </Typography>
+            </Box>
+          </Paper>
+        </motion.div>
+      </Container>
+    </Box>
   );
 };
 
