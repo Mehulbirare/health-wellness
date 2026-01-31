@@ -9,6 +9,8 @@ import Footer from './components/layout/Footer';
 import Home from './components/pages/Home';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
+import Kitchen from './components/pages/Kitchen';
+import RecipeDetail from './components/pages/RecipeDetail';
 import Dashboard from './components/dashboard/Dashboard';
 import Assessment from './components/assessment/Assessment';
 import Results from './components/assessment/Results';
@@ -58,61 +60,63 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route 
-              path="/dashboard" 
+            <Route path="/kitchen" element={<Kitchen />} />
+            <Route path="/kitchen/recipe/:id" element={<RecipeDetail />} />
+            <Route
+              path="/dashboard"
               element={
                 <PrivateRoute>
                   <Dashboard />
                 </PrivateRoute>
-              } 
+              }
             />
-            <Route 
-              path="/assessment" 
+            <Route
+              path="/assessment"
               element={
                 <PrivateRoute>
                   <Assessment />
                 </PrivateRoute>
-              } 
+              }
             />
-            <Route 
-              path="/results/:id" 
+            <Route
+              path="/results/:id"
               element={
                 <PrivateRoute>
                   <Results />
                 </PrivateRoute>
-              } 
+              }
             />
-            <Route 
-              path="/profile" 
+            <Route
+              path="/profile"
               element={
                 <PrivateRoute>
                   <Profile />
                 </PrivateRoute>
-              } 
+              }
             />
-            <Route 
-              path="/admin" 
+            <Route
+              path="/admin"
               element={
                 <PrivateRoute requiredRole="admin">
                   <AdminDashboard />
                 </PrivateRoute>
-              } 
+              }
             />
-            <Route 
-              path="/admin/users" 
+            <Route
+              path="/admin/users"
               element={
                 <PrivateRoute requiredRole="admin">
                   <AdminUsers />
                 </PrivateRoute>
-              } 
+              }
             />
-            <Route 
-              path="/admin/assessments" 
+            <Route
+              path="/admin/assessments"
               element={
                 <PrivateRoute requiredRole="admin">
                   <AdminAssessments />
                 </PrivateRoute>
-              } 
+              }
             />
             <Route path="*" element={<NotFound />} />
           </Routes>

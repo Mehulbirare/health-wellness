@@ -32,7 +32,8 @@ import {
   ExitToApp as LogoutIcon,
   AdminPanelSettings as AdminIcon,
   Home as HomeIcon,
-  LocalFlorist as LeafIcon
+  LocalFlorist as LeafIcon,
+  Restaurant as KitchenIcon
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 
@@ -79,6 +80,7 @@ const Navbar = () => {
 
   const menuItems = [
     { text: 'Home', path: '/', icon: <HomeIcon /> },
+    { text: 'Kitchen', path: '/kitchen', icon: <KitchenIcon /> },
     { text: 'Assessment', path: '/assessment', icon: <AssessmentIcon /> },
     { text: 'Dashboard', path: '/dashboard', icon: <DashboardIcon />, private: true },
   ];
