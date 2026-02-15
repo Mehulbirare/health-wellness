@@ -33,6 +33,8 @@ Ayurveda teaches that health is the state of being established in one's own natu
 | **📋 Prakruti Assessment** | A 20-point comprehensive diagnostic covering physical and mental traits. |
 | **📊 Dynamic Dashboard** | Real-time visual representation of your Dosha distribution using interactive charts. |
 | **🥗 Personalized Diet** | Nutrition guidelines tailored to fuel your specific metabolic fire. |
+| **🍳 Smart Dosha Kitchen** | Netflix-style recipe browser with Dosha-specific meal recommendations. |
+| **🔔 Smart Reminders** | Personalized wellness reminders with browser notifications for meals, meditation, and more. |
 | **🧘 Lifestyle Coaching** | Daily routines (Dinacharya) designed for your constitution. |
 | **🌓 Dark/Light Mode** | Premium UI experience with glassmorphism and smooth transitions. |
 | **⚙️ Admin Suite** | Powerful dashboard for managing user data and assessment metrics. |
@@ -87,6 +89,36 @@ Ayurveda teaches that health is the state of being established in one's own natu
    ```bash
    npm run dev
    ```
+
+---
+
+## 🔔 Smart Reminders & Notifications
+
+Stay consistent with your wellness journey through intelligent, personalized reminders.
+
+### Features
+- **8 Reminder Types**: Meal, Hydration, Meditation, Supplement, Exercise, Sleep, Assessment, and Custom
+- **Flexible Scheduling**: Set specific times and days, or use "everyday" for daily reminders
+- **Browser Notifications**: Real-time desktop and mobile notifications
+- **Quick Setup**: One-click default reminders for instant wellness tracking
+- **Smart Management**: Enable/disable, edit, delete, and snooze reminders
+- **Beautiful UI**: Type-specific icons and colors with glassmorphism design
+
+### Quick Start
+1. Navigate to **Reminders** in the navbar
+2. Click **"Enable Now"** to allow browser notifications
+3. Click **"Setup Default Reminders"** for 8 pre-configured wellness reminders
+4. Or create custom reminders tailored to your routine
+
+### Default Reminders Include
+- 🍽️ Breakfast (8:00 AM)
+- 🍽️ Lunch (12:30 PM)
+- 🍽️ Dinner (7:00 PM)
+- 💧 Morning Hydration (10:00 AM)
+- 💧 Afternoon Hydration (3:00 PM)
+- 🧘 Morning Meditation (7:00 AM)
+- 🧘 Evening Meditation (8:00 PM)
+- 😴 Bedtime (10:00 PM)
 
 ---
 

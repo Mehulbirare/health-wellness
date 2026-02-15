@@ -33,7 +33,8 @@ import {
   AdminPanelSettings as AdminIcon,
   Home as HomeIcon,
   LocalFlorist as LeafIcon,
-  Restaurant as KitchenIcon
+  Restaurant as KitchenIcon,
+  NotificationsActive as RemindersIcon
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 
@@ -83,6 +84,7 @@ const Navbar = () => {
     { text: 'Kitchen', path: '/kitchen', icon: <KitchenIcon /> },
     { text: 'Assessment', path: '/assessment', icon: <AssessmentIcon /> },
     { text: 'Dashboard', path: '/dashboard', icon: <DashboardIcon />, private: true },
+    { text: 'Reminders', path: '/reminders', icon: <RemindersIcon />, private: true },
   ];
 
   const drawer = (

@@ -15,6 +15,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import Assessment from './components/assessment/Assessment';
 import Results from './components/assessment/Results';
 import Profile from './components/user/Profile';
+import Reminders from './components/pages/Reminders';
 import AdminDashboard from './components/admin/AdminDashboard';
 import AdminUsers from './components/admin/AdminUsers';
 import AdminAssessments from './components/admin/AdminAssessments';
@@ -91,6 +92,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <Profile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/reminders"
+              element={
+                <PrivateRoute>
+                  <Reminders />
                 </PrivateRoute>
               }
             />
