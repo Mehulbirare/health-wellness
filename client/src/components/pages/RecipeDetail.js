@@ -57,17 +57,57 @@ const RecipeDetail = () => {
     }
 
     return (
-        <Box sx={{ minHeight: '100vh', pt: 12, pb: 8 }}>
+        <Box sx={{
+            minHeight: '100vh',
+            pt: 12,
+            pb: 8,
+            '@media print': {
+                pt: 4,
+                pb: 4,
+                height: 'auto',
+                minHeight: 'auto',
+                bgcolor: 'white',
+                color: 'black'
+            }
+        }}>
+            <style>
+                {`
+                    @media print {
+                        body * {
+                            visibility: hidden;
+                        }
+                        #printable-recipe-content, #printable-recipe-content * {
+                            visibility: visible;
+                        }
+                        #printable-recipe-content {
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            width: 100%;
+                            background: white;
+                            z-index: 9999;
+                        }
+                        html, body {
+                            height: auto;
+                            overflow: visible !important;
+                        }
+                    }
+                `}
+            </style>
             <Container maxWidth="lg">
                 <Button
                     startIcon={<ArrowBackIcon />}
                     onClick={() => navigate(-1)}
-                    sx={{ mb: 4, color: 'text.secondary' }}
+                    sx={{
+                        mb: 4,
+                        color: 'text.secondary',
+                        '@media print': { display: 'none' }
+                    }}
                 >
                     Back to Kitchen
                 </Button>
 
-                <Grid container spacing={6}>
+                <Grid container spacing={6} id="printable-recipe-content">
                     {/* Left Column: Image & Quick Stats */}
                     <Grid item xs={12} md={6}>
                         <motion.div
@@ -83,7 +123,13 @@ const RecipeDetail = () => {
                                     width: '100%',
                                     borderRadius: '30px',
                                     boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
-                                    mb: 4
+                                    mb: 4,
+                                    '@media print': {
+                                        boxShadow: 'none',
+                                        borderRadius: '10px',
+                                        maxHeight: '400px',
+                                        objectFit: 'cover'
+                                    }
                                 }}
                             />
 
@@ -93,7 +139,12 @@ const RecipeDetail = () => {
                                     p: 3,
                                     borderRadius: '20px',
                                     bgcolor: darkMode ? 'rgba(255,255,255,0.05)' : 'white',
-                                    border: '1px solid rgba(0,0,0,0.05)'
+                                    border: '1px solid rgba(0,0,0,0.05)',
+                                    '@media print': {
+                                        border: '1px solid #ccc',
+                                        bgcolor: 'white !important',
+                                        color: 'black'
+                                    }
                                 }}
                             >
                                 <Grid container spacing={2} sx={{ textAlign: 'center' }}>
@@ -141,7 +192,11 @@ const RecipeDetail = () => {
                                                 sx={{
                                                     bgcolor: 'primary.main',
                                                     color: 'white',
-                                                    fontWeight: 600
+                                                    fontWeight: 600,
+                                                    '@media print': {
+                                                        border: '1px solid #000',
+                                                        color: 'black'
+                                                    }
                                                 }}
                                             />
                                         ))}
@@ -154,7 +209,7 @@ const RecipeDetail = () => {
                                         <Typography variant="body2" color="text.secondary">({recipe.rating})</Typography>
                                     </Box>
                                 </Box>
-                                <Box sx={{ display: 'flex', gap: 1 }}>
+                                <Box sx={{ display: 'flex', gap: 1, '@media print': { display: 'none' } }}>
                                     <IconButton sx={{ bgcolor: darkMode ? 'rgba(255,255,255,0.05)' : '#f1f5f9' }}>
                                         <ShareIcon fontSize="small" />
                                     </IconButton>
@@ -168,7 +223,18 @@ const RecipeDetail = () => {
                                 {recipe.description}
                             </Typography>
 
-                            <Box sx={{ mb: 4, p: 3, borderRadius: '20px', bgcolor: 'rgba(120, 194, 173, 0.1)', border: '1px solid rgba(120, 194, 173, 0.2)' }}>
+                            <Box sx={{
+                                mb: 4,
+                                p: 3,
+                                borderRadius: '20px',
+                                bgcolor: 'rgba(120, 194, 173, 0.1)',
+                                border: '1px solid rgba(120, 194, 173, 0.2)',
+                                '@media print': {
+                                    bgcolor: 'white !important',
+                                    border: '1px solid #ccc',
+                                    color: 'black'
+                                }
+                            }}>
                                 <Typography variant="subtitle1" sx={{ fontWeight: 700, color: 'primary.main', mb: 1 }}>
                                     Ayurvedic Benefits
                                 </Typography>
@@ -208,7 +274,12 @@ const RecipeDetail = () => {
                                                 fontWeight: 700,
                                                 fontSize: '0.9rem',
                                                 mr: 2,
-                                                mt: 0.5
+                                                mt: 0.5,
+                                                '@media print': {
+                                                    border: '1px solid black',
+                                                    color: 'black',
+                                                    bgcolor: 'transparent'
+                                                }
                                             }}
                                         >
                                             {i + 1}
@@ -224,7 +295,12 @@ const RecipeDetail = () => {
                             <Button
                                 variant="outlined"
                                 startIcon={<PrintIcon />}
-                                sx={{ mt: 2, borderRadius: '50px' }}
+                                onClick={() => window.print()}
+                                sx={{
+                                    mt: 2,
+                                    borderRadius: '50px',
+                                    '@media print': { display: 'none' }
+                                }}
                             >
                                 Print Recipe
                             </Button>
