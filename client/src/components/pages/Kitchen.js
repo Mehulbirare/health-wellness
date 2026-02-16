@@ -81,6 +81,7 @@ const ElementTag = ({ element }) => {
 const Kitchen = () => {
     const { darkMode } = useTheme();
     const { user } = useAuth();
+    const [activeFilter, setActiveFilter] = useState('All');
     const [activeCategory, setActiveCategory] = useState(null);
     const [hoveredCard, setHoveredCard] = useState(null);
 
