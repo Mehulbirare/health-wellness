@@ -68,7 +68,7 @@ Ayurveda teaches that health is the state of being established in one's own natu
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/MehulBirare/ayurvedic-prakruti-assessment.git
+   git clone https://github.com/Mehulbirare/ayurvedic-prakruti-assessment.git
    cd ayurvedic-prakruti-assessment
    ```
 

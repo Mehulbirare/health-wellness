@@ -81,7 +81,7 @@ const ElementTag = ({ element }) => {
 const Kitchen = () => {
     const { darkMode } = useTheme();
     const { user } = useAuth();
-    const [activeFilter, setActiveFilter] = useState('All');
+    const [activeCategory, setActiveCategory] = useState(null);
     const [hoveredCard, setHoveredCard] = useState(null);
 
     // Auto-select filter based on user's Dosha
@@ -106,9 +106,11 @@ const Kitchen = () => {
     // In a real app, this would default to user.dosha if available
     const filters = ['All', 'Vata', 'Pitta', 'Kapha', 'Tridoshic'];
 
-    const filteredRecipes = activeFilter === 'All'
-        ? recipesData
-        : recipesData.filter(r => r.dosha.includes(activeFilter));
+    const filteredRecipes = recipesData.filter(recipe => {
+        const matchesDosha = activeFilter === 'All' || recipe.dosha.includes(activeFilter);
+        const matchesCategory = !activeCategory || recipe.category === activeCategory;
+        return matchesDosha && matchesCategory;
+    });
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -118,6 +120,14 @@ const Kitchen = () => {
     const itemVariants = {
         hidden: { y: 20, opacity: 0 },
         visible: { y: 0, opacity: 1 }
+    };
+
+    const handleCategoryClick = (category) => {
+        setActiveCategory(category);
+        const element = document.getElementById('recipe-section');
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
     };
 
     return (
@@ -144,7 +154,7 @@ const Kitchen = () => {
                                         <Chip
                                             key={filter}
                                             label={filter}
-                                            onClick={() => setActiveFilter(filter)}
+                                            onClick={() => { setActiveFilter(filter); setActiveCategory(null); }}
                                             sx={{
                                                 px: 2,
                                                 py: 2.5,
@@ -208,140 +218,151 @@ const Kitchen = () => {
                 </Box>
 
                 {/* Netflix Style Horizontal Scroll Section - Trending */}
-                <Typography variant="h4" sx={{ mb: 3, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <SpicyIcon color="primary" /> Trending for {activeFilter === 'All' ? 'Everyone' : activeFilter}
-                </Typography>
+                <Box id="recipe-section">
+                    <Typography variant="h4" sx={{ mb: 3, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <SpicyIcon color="primary" />
+                        {activeCategory ? `${activeCategory} Recipes` : `Trending for ${activeFilter === 'All' ? 'Everyone' : activeFilter}`}
+                        {activeCategory && <Chip label="Clear" size="small" onDelete={() => setActiveCategory(null)} sx={{ ml: 2 }} />}
+                    </Typography>
 
-                <Box
-                    sx={{
-                        display: 'flex',
-                        overflowX: 'auto',
-                        gap: 3,
-                        pb: 4,
-                        mb: 6,
-                        '::-webkit-scrollbar': { display: 'none' },
-                        msOverflowStyle: 'none',
-                        scrollbarWidth: 'none',
-                        perspective: '1000px'
-                    }}
-                >
-                    <AnimatePresence mode="popLayout">
-                        {filteredRecipes.map((recipe, index) => (
-                            <motion.div
-                                key={recipe.id}
-                                layout
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.3 }}
-                                style={{ minWidth: '320px', maxWidth: '320px' }}
-                            >
-                                <Card
-                                    onMouseEnter={() => setHoveredCard(recipe.id)}
-                                    onMouseLeave={() => setHoveredCard(null)}
-                                    sx={{
-                                        height: '100%',
-                                        borderRadius: '24px',
-                                        bgcolor: darkMode ? '#1e293b' : 'white',
-                                        border: '1px solid rgba(0,0,0,0.05)',
-                                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                        transform: hoveredCard === recipe.id ? 'translateY(-10px)' : 'none',
-                                        boxShadow: hoveredCard === recipe.id ? '0 20px 40px rgba(0,0,0,0.15)' : 'none',
-                                        position: 'relative',
-                                        overflow: 'visible'
-                                    }}
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            overflowX: 'auto',
+                            gap: 3,
+                            pb: 4,
+                            mb: 6,
+                            '::-webkit-scrollbar': { display: 'none' },
+                            msOverflowStyle: 'none',
+                            scrollbarWidth: 'none',
+                            perspective: '1000px'
+                        }}
+                    >
+                        <AnimatePresence mode="popLayout">
+                            {filteredRecipes.length > 0 ? filteredRecipes.map((recipe, index) => (
+                                <motion.div
+                                    key={recipe.id}
+                                    layout
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    transition={{ duration: 0.3 }}
+                                    style={{ minWidth: '320px', maxWidth: '320px' }}
                                 >
-                                    {/* Floating Action Badge */}
-                                    <Box
+                                    <Card
+                                        onMouseEnter={() => setHoveredCard(recipe.id)}
+                                        onMouseLeave={() => setHoveredCard(null)}
                                         sx={{
-                                            position: 'absolute',
-                                            top: 15,
-                                            right: 15,
-                                            zIndex: 2,
-                                            bgcolor: 'white',
-                                            borderRadius: '50%',
-                                            p: 0.5,
-                                            boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
+                                            height: '100%',
+                                            borderRadius: '24px',
+                                            bgcolor: darkMode ? '#1e293b' : 'white',
+                                            border: '1px solid rgba(0,0,0,0.05)',
+                                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                            transform: hoveredCard === recipe.id ? 'translateY(-10px)' : 'none',
+                                            boxShadow: hoveredCard === recipe.id ? '0 20px 40px rgba(0,0,0,0.15)' : 'none',
+                                            position: 'relative',
+                                            overflow: 'visible'
                                         }}
                                     >
-                                        <IconButton size="small" color="primary">
-                                            <HeartIcon fontSize="small" />
-                                        </IconButton>
-                                    </Box>
-
-                                    <CardMedia
-                                        component="img"
-                                        height="200"
-                                        image={recipe.image}
-                                        alt={recipe.title}
-                                        sx={{ borderRadius: '24px 24px 0 0' }}
-                                    />
-
-                                    <CardContent sx={{ p: 3 }}>
-                                        <Box sx={{ display: 'flex', gap: 1, mb: 1.5, flexWrap: 'wrap' }}>
-                                            {recipe.elements.map(el => <ElementTag key={el} element={el} />)}
-                                        </Box>
-
-                                        <Typography variant="h6" sx={{ fontWeight: 700, mb: 1, lineHeight: 1.2 }}>
-                                            {recipe.title}
-                                        </Typography>
-
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, color: 'text.secondary', fontSize: '0.85rem' }}>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                                                <TimeIcon fontSize="inherit" /> {recipe.time}
-                                            </Box>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                                                <DifficultyIcon fontSize="inherit" /> {recipe.difficulty}
-                                            </Box>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                                                <Rating value={recipe.rating} max={1} readOnly size="small" /> {recipe.rating}
-                                            </Box>
-                                        </Box>
-
-                                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                                            {recipe.description}
-                                        </Typography>
-
-                                        <Button
-                                            fullWidth
-                                            component={RouterLink}
-                                            to={`/kitchen/recipe/${recipe.id}`}
-                                            variant="outlined"
-                                            endIcon={<ArrowIcon />}
+                                        {/* Floating Action Badge */}
+                                        <Box
                                             sx={{
-                                                borderRadius: '12px',
-                                                borderWidth: '2px',
-                                                fontWeight: 600,
-                                                '&:hover': { borderWidth: '2px' }
+                                                position: 'absolute',
+                                                top: 15,
+                                                right: 15,
+                                                zIndex: 2,
+                                                bgcolor: 'white',
+                                                borderRadius: '50%',
+                                                p: 0.5,
+                                                boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
                                             }}
                                         >
-                                            View Recipe
-                                        </Button>
-                                    </CardContent>
-                                </Card>
-                            </motion.div>
-                        ))}
-                    </AnimatePresence>
+                                            <IconButton size="small" color="primary">
+                                                <HeartIcon fontSize="small" />
+                                            </IconButton>
+                                        </Box>
+
+                                        <CardMedia
+                                            component="img"
+                                            height="200"
+                                            image={recipe.image}
+                                            alt={recipe.title}
+                                            sx={{ borderRadius: '24px 24px 0 0' }}
+                                        />
+
+                                        <CardContent sx={{ p: 3 }}>
+                                            <Box sx={{ display: 'flex', gap: 1, mb: 1.5, flexWrap: 'wrap' }}>
+                                                {recipe.elements.map(el => <ElementTag key={el} element={el} />)}
+                                            </Box>
+
+                                            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1, lineHeight: 1.2 }}>
+                                                {recipe.title}
+                                            </Typography>
+
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, color: 'text.secondary', fontSize: '0.85rem' }}>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                                    <TimeIcon fontSize="inherit" /> {recipe.time}
+                                                </Box>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                                    <DifficultyIcon fontSize="inherit" /> {recipe.difficulty}
+                                                </Box>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                                    <Rating value={recipe.rating} max={1} readOnly size="small" /> {recipe.rating}
+                                                </Box>
+                                            </Box>
+
+                                            <Typography variant="body2" color="text.secondary" sx={{ mb: 2, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                                {recipe.description}
+                                            </Typography>
+
+                                            <Button
+                                                fullWidth
+                                                component={RouterLink}
+                                                to={`/kitchen/recipe/${recipe.id}`}
+                                                variant="outlined"
+                                                endIcon={<ArrowIcon />}
+                                                sx={{
+                                                    borderRadius: '12px',
+                                                    borderWidth: '2px',
+                                                    fontWeight: 600,
+                                                    '&:hover': { borderWidth: '2px' }
+                                                }}
+                                            >
+                                                View Recipe
+                                            </Button>
+                                        </CardContent>
+                                    </Card>
+                                </motion.div>
+                            )) : (
+                                <Box sx={{ width: '100%', py: 4, textAlign: 'center' }}>
+                                    <Typography variant="h6" color="text.secondary">No recipes found for this category/dosha combination.</Typography>
+                                </Box>
+                            )}
+                        </AnimatePresence>
+                    </Box>
                 </Box>
 
                 {/* Categories Grid */}
                 <Typography variant="h4" sx={{ mb: 4, fontWeight: 700 }}>Explore by Category</Typography>
                 <Grid container spacing={3}>
-                    {['Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Elixirs', 'Deserts'].map((cat, i) => (
+                    {['Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Elixirs', 'Desserts'].map((cat, i) => (
                         <Grid item xs={6} md={2} key={cat}>
                             <motion.div
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
                                 <Box
+                                    onClick={() => handleCategoryClick(cat)}
                                     sx={{
                                         p: 3,
                                         borderRadius: '20px',
-                                        bgcolor: darkMode ? 'rgba(255,255,255,0.05)' : 'white',
+                                        bgcolor: activeCategory === cat ? 'primary.main' : (darkMode ? 'rgba(255,255,255,0.05)' : 'white'),
+                                        color: activeCategory === cat ? 'white' : 'inherit',
                                         textAlign: 'center',
-                                        border: '1px solid rgba(0,0,0,0.05)',
+                                        border: activeCategory === cat ? 'none' : '1px solid rgba(0,0,0,0.05)',
                                         cursor: 'pointer',
                                         transition: 'all 0.3s',
+                                        boxShadow: activeCategory === cat ? '0 10px 20px rgba(6,78,59,0.3)' : 'none',
                                         '&:hover': {
                                             bgcolor: 'primary.main',
                                             color: 'white',

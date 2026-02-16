@@ -2,6 +2,7 @@ export const recipesData = [
     {
         id: 1,
         title: 'Golden Turmeric Latte',
+        category: 'Elixirs',
         image: 'https://images.unsplash.com/photo-1623595560668-3ac045e771c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         time: '5 min',
         difficulty: 'Easy',
@@ -32,6 +33,7 @@ export const recipesData = [
     {
         id: 2,
         title: 'Cooling Cucumber & Mint Salad',
+        category: 'Lunch',
         image: 'https://images.unsplash.com/photo-1623428187969-5da2dcea5ebf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         time: '10 min',
         difficulty: 'Easy',
@@ -61,6 +63,7 @@ export const recipesData = [
     {
         id: 3,
         title: 'Spiced Mung Bean Ichari',
+        category: 'Dinner',
         image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         time: '40 min',
         difficulty: 'Medium',
@@ -95,6 +98,7 @@ export const recipesData = [
     {
         id: 4,
         title: 'Roasted Root Vegetable Bowl',
+        category: 'Dinner',
         image: 'https://images.unsplash.com/photo-1543339308-43e59d6b73a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         time: '45 min',
         difficulty: 'Medium',
@@ -125,6 +129,7 @@ export const recipesData = [
     {
         id: 5,
         title: 'Energizing Green Detox Soup',
+        category: 'Dinner',
         image: 'https://images.unsplash.com/photo-1604542031651-5367d6928e46?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         time: '25 min',
         difficulty: 'Medium',
@@ -155,6 +160,7 @@ export const recipesData = [
     {
         id: 6,
         title: 'Coconut & Lime Rice',
+        category: 'Lunch',
         image: 'https://images.unsplash.com/photo-1596560548464-f010549b84d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         time: '20 min',
         difficulty: 'Easy',
@@ -180,5 +186,89 @@ export const recipesData = [
             'Top with shredded coconut.'
         ],
         benefits: 'Coconut is cooling and sweet, making it ideal for Pitta types. It provides sustenance without overheating the body.'
+    },
+    {
+        id: 7,
+        title: 'Warm Spiced Oatmeal with Dates',
+        category: 'Breakfast',
+        image: 'https://images.unsplash.com/photo-1517673132405-a56a62b18caf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        time: '15 min',
+        difficulty: 'Easy',
+        rating: 4.8,
+        dosha: ['Vata', 'Pitta'],
+        elements: ['Earth', 'Water'],
+        tags: ['Grounding', 'Nourishing'],
+        calories: 320,
+        description: 'Creamy oats cooked with cardamom, cinnamon, and sweet dates for a grounding start.',
+        ingredients: [
+            '1/2 cup rolled oats',
+            '1 cup almond milk',
+            '2 dates, chopped',
+            '1/4 tsp cardamom',
+            '1/4 tsp cinnamon',
+            '1 tbsp crushed walnuts'
+        ],
+        instructions: [
+            'In a pot, bring milk to a simmer.',
+            'Add oats, dates, and spices. Cook on low heat for 10 minutes.',
+            'Stir occasionally until creamy.',
+            'Top with walnuts and serve warm.'
+        ],
+        benefits: 'Oats are heavy and grounding, perfect for calming Vata. Spices improve digestibility.'
+    },
+    {
+        id: 8,
+        title: 'Ojas-Building Date & Almond Shake',
+        category: 'Snacks',
+        image: 'https://images.unsplash.com/photo-1579306194872-64d3b7bac4c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        time: '5 min',
+        difficulty: 'Easy',
+        rating: 4.9,
+        dosha: ['Vata', 'Pitta'],
+        elements: ['Earth', 'Water'],
+        tags: ['Energizing', 'Rejuvenating'],
+        calories: 250,
+        description: 'A nutrient-dense shake to build Ojas (vitality) and provide sustained energy.',
+        ingredients: [
+            '1 cup warm almond milk',
+            '2 soaked dates',
+            '5 soaked almonds (peeled)',
+            'Pinch of saffron',
+            'Pinch of cardamom'
+        ],
+        instructions: [
+            'Blend all ingredients until smooth and frothy.',
+            'Serve warm for better digestion.'
+        ],
+        benefits: 'Dates and almonds are excellent for building strength and vitality (Ojas).'
+    },
+    {
+        id: 9,
+        title: 'Saffron & Cardamom Rice Pudding',
+        category: 'Desserts',
+        image: 'https://images.unsplash.com/photo-1516714435131-44d6b64dc6a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        time: '35 min',
+        difficulty: 'Medium',
+        rating: 4.7,
+        dosha: ['Pitta', 'Vata'],
+        elements: ['Water', 'Earth'],
+        tags: ['Sweet', 'Comforting'],
+        calories: 280,
+        description: 'A rich, creamy dessert scented with royal spices. Pure comfort.',
+        ingredients: [
+            '1/4 cup basmati rice',
+            '2 cups milk (dairy or almond)',
+            '2 tbsp raw sugar or maple syrup',
+            '1/4 tsp cardamom powder',
+            'Pinch of saffron strands',
+            '1 tbsp roasted pistachios'
+        ],
+        instructions: [
+            'Rinse rice and simmer with milk in a heavy-bottomed pan.',
+            'Cook on low heat, stirring often, until rice is very soft and milk thickens (about 25-30 mins).',
+            'Add sugar, cardamom, and saffron. Cook for another 5 mins.',
+            'Serve warm or chilled, topped with pistachios.'
+        ],
+        benefits: 'Rice pudding (Kheer) is cooling and nutritive, excellent for pacifying high Pitta.'
     }
 ];
