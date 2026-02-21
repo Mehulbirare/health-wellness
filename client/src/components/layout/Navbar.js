@@ -34,7 +34,8 @@ import {
   Home as HomeIcon,
   LocalFlorist as LeafIcon,
   Restaurant as KitchenIcon,
-  NotificationsActive as RemindersIcon
+  NotificationsActive as RemindersIcon,
+  SelfImprovement as YogaIcon
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 
@@ -82,6 +83,7 @@ const Navbar = () => {
   const menuItems = [
     { text: 'Home', path: '/', icon: <HomeIcon /> },
     { text: 'Kitchen', path: '/kitchen', icon: <KitchenIcon /> },
+    { text: 'Yoga', path: '/yoga', icon: <YogaIcon /> },
     { text: 'Assessment', path: '/assessment', icon: <AssessmentIcon /> },
     { text: 'Dashboard', path: '/dashboard', icon: <DashboardIcon />, private: true },
     { text: 'Reminders', path: '/reminders', icon: <RemindersIcon />, private: true },

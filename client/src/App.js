@@ -16,6 +16,7 @@ import Assessment from './components/assessment/Assessment';
 import Results from './components/assessment/Results';
 import Profile from './components/user/Profile';
 import Reminders from './components/pages/Reminders';
+import YogaSection from './components/pages/YogaSection';
 import AdminDashboard from './components/admin/AdminDashboard';
 import AdminUsers from './components/admin/AdminUsers';
 import AdminAssessments from './components/admin/AdminAssessments';
@@ -63,6 +64,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/kitchen" element={<Kitchen />} />
             <Route path="/kitchen/recipe/:id" element={<RecipeDetail />} />
+            <Route path="/yoga" element={<YogaSection />} />
             <Route
               path="/dashboard"
               element={

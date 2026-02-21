@@ -509,8 +509,8 @@ const Home = () => {
               <Grid container spacing={3}>
                 {[
                   { icon: <SpaIcon />, title: 'Deep Self-Awareness', text: 'Understand why you feel and act the way you do.' },
+                  { icon: <FitnessIcon />, title: 'Yoga Guide', text: 'Ancient asanas tailored to harmonize your specific constitution.' },
                   { icon: <DiningIcon />, title: 'Smart Nutrition', text: 'Eat foods that fuel your specific fire.' },
-                  { icon: <FitnessIcon />, title: 'Intuitive Movement', text: 'Exercise in a way that energizes, never drains.' },
                   { icon: <PsychologyIcon />, title: 'Mental Clarity', text: 'Align your mind with its natural rhythm.' }
                 ].map((item, i) => (
                   <Grid item xs={12} sm={6} key={i}>
