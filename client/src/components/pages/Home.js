@@ -58,7 +58,7 @@ const Home = () => {
       title: 'Vata',
       subtitle: 'Air & Ether',
       desc: 'The energy of movement. High creativity, quick mind, and enthusiastic spirit.',
-      image: '/assets/images/vata.png',
+      image: `${process.env.PUBLIC_URL}/assets/images/vata.png`,
       color: '#8E85EE',
       qualities: 'Dry, light, cold, mobile'
     },
@@ -66,7 +66,7 @@ const Home = () => {
       title: 'Pitta',
       subtitle: 'Fire & Water',
       desc: 'The energy of transformation. Sharp intellect, strong digestion, and ambitious drive.',
-      image: '/assets/images/pitta.png',
+      image: `${process.env.PUBLIC_URL}/assets/images/pitta.png`,
       color: '#FF7D7D',
       qualities: 'Hot, sharp, light, oily'
     },
@@ -74,7 +74,7 @@ const Home = () => {
       title: 'Kapha',
       subtitle: 'Earth & Water',
       desc: 'The energy of structure. Calm temperament, great endurance, and loyal nature.',
-      image: '/assets/images/kapha.png',
+      image: `${process.env.PUBLIC_URL}/assets/images/kapha.png`,
       color: '#78C2AD',
       qualities: 'Heavy, slow, stable, soft'
     }
@@ -106,7 +106,7 @@ const Home = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundImage: 'url(/assets/images/hero.png)',
+            backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/hero.png)`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             zIndex: -1,
