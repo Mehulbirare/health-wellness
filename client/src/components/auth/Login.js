@@ -106,7 +106,7 @@ const Login = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundImage: 'url(/assets/images/auth_bg.png)',
+          backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/auth_bg.png)`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           filter: 'brightness(0.6)',
