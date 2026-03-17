@@ -149,6 +149,16 @@ We welcome contributions from the community!
 
 ---
 
+## 📬 Contact
+
+**Mehul Birare**
+
+- 🐙 GitHub: [@Mehulbirare](https://github.com/Mehulbirare)
+- 🐛 Report issues: [Issue Tracker](https://github.com/MehulBirare/ayurvedic-prakruti-assessment/issues)
+- 💡 Request features: [Feature Requests](https://github.com/MehulBirare/ayurvedic-prakruti-assessment/issues)
+
+---
+
 <div align="center">
   <p>Built with ❤️ for a Healthier World</p>
   <p><strong>© 2026 Mehul Birare</strong></p>
